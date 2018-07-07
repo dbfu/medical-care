@@ -9,10 +9,11 @@
         <div class="expense-form">
           <el-form :inline="true"  class="demo-form-inline">
               <el-form-item label="报销城市">
-                <el-select  placeholder="请选择报销城市">
-                  <el-option label="安庆市" value="shanghai"></el-option>
-                  <el-option label="上海市" value="beijing"></el-option>
-                  <el-option label="深圳市" value="beijing"></el-option>
+                <el-select v-model="value2"  placeholder="请选择报销城市">
+                  <el-option  v-for="item in citys"
+                   :key="item.name"
+                   :label="item.name"
+                   :value="item.name"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="药品名称">
@@ -27,29 +28,29 @@
         <div class="clearfix">
           <el-table
             stripe
-            :data="tableData"
+            :data="medicines"
             border
             style="width: 100%">
             <el-table-column
-              prop="drugType"
+              prop="type"
               label="药品类型"
               align='center'
               min-width='25%'>
             </el-table-column>
             <el-table-column
-              prop="drugName"
+              prop="medicineName.genericName"
               label="药品名称"
               align='center'
               min-width='25%'>
             </el-table-column>
             <el-table-column
-              prop="drugJx"
+              prop="drugNo"
               label="药品剂型"
               align='center'
               min-width='25%'>
             </el-table-column>
             <el-table-column
-              prop="drugNumber"
+              prop="drugNo"
               label="药品编号"
               align='center'
               min-width='25%'>
@@ -165,9 +166,34 @@ export default {
           drugName: '酮替芬',
           drugJx: '吸入剂',
           drugNumber: 'L20030000032b'
-        }]
+        }],
+        citys:[],
+        value2:'',
+        medicines:[]
     };
+  },
+  methods:{
+    getCitys(){
+        this.$axios.get("/api/socialInsurancePolicy/allcitys").then(res => {
+        this.citys = res.data;
+      })
+    },
+    getAllMedicine(){
+      const initParams={
+        page:0
+      }
+      this.$axios.get(`/api/medicine/getAll/${initParams.page}`).then(res => {
+       this.medicines = res.data.content;
+      })
+    }
+  },
+  created(){
   }
+  ,
+  mounted() {
+   this.getCitys();
+   this.getAllMedicine();
+  },
 };
 </script>
 <style>
