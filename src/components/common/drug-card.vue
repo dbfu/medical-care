@@ -1,14 +1,16 @@
 <template>
-  <div :class="{'drug-card-box': true,'drug-card-box-selected':showDesc}">
-    <img src="../../assets/images/drug1.jpg" class="drug-image" />
-    <div class="drug-name">香雪 硝苯地平片</div>
-    <div class="drug-price">¥<span style="font-size: 26px;">3</span>/瓶</div>
-    <div class="drug-desc" v-show="showDesc">
+  <!-- width:calc(206/1920*100vw);height:calc(200/1080*100vh) -->
+  <div :class="{'drug-card-box': true,'drug-card-box-selected':showDesc}" >
+    <img  :src='getImgSrc' style='width:calc(206/1920*100vw);height:208px' />
+  
+    <div class="drug-name" >{{drugInfo.medicineName.genericName}}</div>
+    <div class="drug-price">¥<span style="font-size: calc(26/1920*100vw);">{{drugInfo.price}}</span>/瓶</div>
+    <div class="drug-desc" >
       <div class="desc-title">
         <span>适应症</span>
       </div>
       <div class="desc-content">
-        <span>补充多种维生素，每天只需1粒，健康营养吃出来，聚会、玩乐、上班、休闲时刻刻随身携带</span>
+        <span>{{drugInfo.indicationDescription}}</span>
       </div>
     </div>
   </div>
@@ -16,7 +18,15 @@
 <script>
 export default {
   props: {
-    showDesc: Boolean
+    showDesc: Boolean,
+    drugInfo:{},
+    imgSrc:''
+  },
+  computed:{
+    getImgSrc(){
+      const drugInfo = this.drugInfo;
+      return `http://${drugInfo.fileServerIp}:${drugInfo.fileServerPort}${drugInfo.fileServerPath}${drugInfo.imgUrl}`;
+    }
   }
 };
 </script>
@@ -42,8 +52,8 @@ export default {
   width: 100%;
 }
 .drug-name {
-  font-size: 16px;
-  margin-top: 28px;
+  font-size: calc(16/1920*100vw);
+  margin-top: calc(28/1080*100vh);
 }
 .drug-price {
   color: #f05f5f;
@@ -60,6 +70,8 @@ export default {
   right: 0;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
+  /* display: none; */
+  opacity: 0;
 }
 .desc-title {
   color: #fff;
@@ -84,6 +96,11 @@ export default {
   color: #fff;
   vertical-align: middle;
   font-weight: bold;
+}
+.drug-card-box:hover .drug-desc{
+  /* display: inline-block; */
+  opacity: .6;
+  transition: opacity 2s;
 }
 </style>
 

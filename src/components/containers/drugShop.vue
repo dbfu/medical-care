@@ -46,40 +46,8 @@
       <div class='allShops'>
         <h3>全部商品分类</h3>
         <ul>
-          <li>
-            <label>热卖专区</label>
-            <span>血压计 / 茅台药酒</span>
-          </li>
-          <li>
-            <label>儿童用药</label>
-            <span>血压计 / 茅台药酒</span>
-          </li>
-          <li>
-            <label>感冒发烧</label>
-            <span>血压计 / 茅台药酒</span>
-          </li>
-          <li>
-            <label>肠胃用药</label>
-            <span>血压计 / 茅台药酒</span>
-          </li>
-          <li>
-            <label>减肥瘦身</label>
-            <span>血压计 / 茅台药酒</span>
-          </li>
-          <li>
-            <label>儿童用药</label>
-            <span>血压计 / 茅台药酒</span>
-          </li>
-          <li>
-            <label>感冒发烧</label>
-            <span>血压计 / 茅台药酒</span>
-          </li>
-          <li>
-            <label>肠胃用药</label>
-            <span>血压计 / 茅台药酒</span>
-          </li>
-          <li>
-            <label>减肥瘦身</label>
+          <li v-for="item in categorys">
+            <label>{{item.categoryName}}</label>
             <span>血压计 / 茅台药酒</span>
           </li>
         </ul>
@@ -89,19 +57,23 @@
         <div slot="content">
           <div class="drug-list">
             <el-row :gutter="20">
-              <el-col :span="6">
-                <DrugCard :showDesc="true"></DrugCard>
-              </el-col>
-              <el-col :span="6">
-                <DrugCard></DrugCard>
-              </el-col>
-              <el-col :span="6">
-                <DrugCard></DrugCard>
-              </el-col>
-              <el-col :span="6">
-                <DrugCard></DrugCard>
+              <el-col :span="6" v-for="item in hotFlag" >
+                <div>
+                  <DrugCard  :drugInfo='item'></DrugCard>
+                </div>
+                
               </el-col>
             </el-row>
+            <div class="pagination">
+                <el-pagination
+                @current-change="handleCurrentChange"
+                :page-sizes="[8, 16, 24, 32]"
+                :page-size="8"
+                layout=" prev, pager,next,sizes,total"
+                  background
+                  :total="totalElements">
+                </el-pagination>
+            </div>
           </div>
         </div>
       </Card>
@@ -126,8 +98,44 @@ export default {
   data() {
     return {
       currentTab: 1,
-      currentIndex: 2
+      currentIndex: 2,
+      categorys:[],
+      hotFlag:[],
+      totalElements:null
     };
+  },
+  methods:{ 
+      getCategory(){
+          const page = 0;
+          this.$axios.get(`/api/category/getAll/${page}`).then(res => {
+            this.categorys = res.data.content;
+        })
+      },
+      getMedicineByHotFlag(params){
+        this.$axios.get(`/api/medicine/getMedicineByHotFlag`,{params:params}).then(res => {
+            this.hotFlag = res.data.content;
+             this.totalElements = res.data.totalElements;
+            console.log(this.hotFlag)
+        })
+      },
+      handleCurrentChange(val){
+        const page = val-1;
+        const params = {
+          hotFlag:'Y',
+          page,
+          size:8
+        }
+        this.getMedicineByHotFlag(params);
+      },
+  },
+  mounted(){
+      this.getCategory();
+      const initParams = {
+        hotFlag:'Y',
+        page:0,
+        size:8
+      }
+      this.getMedicineByHotFlag(initParams);
   }
 };
 </script>
@@ -219,12 +227,14 @@ export default {
   font-weight: 700;
 }
 .allShops ul {
-  padding: calc(10/1080*100vh) 0 0 calc(45/1080*100vh);;
+  padding: calc(10/1080*100vh) 0 0 calc(45/1080*100vh);
 }
 .allShops ul li {
-  height: calc(60/1080*100vh);;
+  height: calc(60/1080*100vh);
 }
 .allShops ul li label {
+  display: inline-block;
+  width: calc(80/1920*100vw);
   font-size: calc(20/1920*100vw);
   color: #fff;
   margin-right: calc(15/1920*100vw);
