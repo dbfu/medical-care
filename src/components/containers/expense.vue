@@ -11,17 +11,17 @@
               <el-form-item label="报销城市">
                 <el-select v-model="value2"  placeholder="请选择报销城市">
                   <el-option  v-for="item in citys"
-                   :key="item.name"
+                   :key="item.id"
                    :label="item.name"
-                   :value="item.name"></el-option>
+                   :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="药品名称">
-                <el-input  placeholder="请输入药品名称，如 白加黑"></el-input>
+                <el-input v-model="drugName" placeholder="请输入药品名称，如 白加黑"></el-input>
               </el-form-item>
               
               <el-form-item>
-                <el-button type="primary">查询</el-button>
+                <el-button type="primary" @click="onSubmit">查询</el-button>
               </el-form-item>
           </el-form>
         </div>
@@ -32,7 +32,7 @@
             border
             style="width: 100%">
             <el-table-column
-              prop="type"
+              prop="drugType"
               label="药品类型"
               align='center'
               min-width='25%'>
@@ -44,7 +44,7 @@
               min-width='25%'>
             </el-table-column>
             <el-table-column
-              prop="drugNo"
+              prop="drugDosage"
               label="药品剂型"
               align='center'
               min-width='25%'>
@@ -60,11 +60,13 @@
           </div>
           <div class="pagination">
             <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
             :page-sizes="[10, 20, 30, 40]"
             :page-size="10"
             layout=" prev, pager,next,sizes,total"
               background
-              :total="100">
+              :total="totalElements">
             </el-pagination>
           </div>
 
@@ -110,66 +112,12 @@ export default {
     return {
       currentTab: 1,
       currentIndex: 2,
-      tableData: [{
-          drugType: '西药处方',
-          drugName: '酮替芬',
-          drugJx: '吸入剂',
-          drugNumber: 'L20030000032b'
-        }, {
-          drugType: '西药处方',
-          drugName: '酮替芬',
-          drugJx: '吸入剂',
-          drugNumber: 'L20030000032b'
-        }, {
-          drugType: '西药处方',
-          drugName: '酮替芬',
-          drugJx: '吸入剂',
-          drugNumber: 'L20030000032b'
-        }, {
-          drugType: '西药处方',
-          drugName: '酮替芬',
-          drugJx: '吸入剂',
-          drugNumber: 'L20030000032b'
-        },
-        {
-          drugType: '西药处方',
-          drugName: '酮替芬',
-          drugJx: '吸入剂',
-          drugNumber: 'L20030000032b'
-        },
-        {
-          drugType: '西药处方',
-          drugName: '酮替芬',
-          drugJx: '吸入剂',
-          drugNumber: 'L20030000032b'
-        },
-        {
-          drugType: '西药处方',
-          drugName: '酮替芬',
-          drugJx: '吸入剂',
-          drugNumber: 'L20030000032b'
-        },
-        {
-          drugType: '西药处方',
-          drugName: '酮替芬',
-          drugJx: '吸入剂',
-          drugNumber: 'L20030000032b'
-        },
-        {
-          drugType: '西药处方',
-          drugName: '酮替芬',
-          drugJx: '吸入剂',
-          drugNumber: 'L20030000032b'
-        },
-        {
-          drugType: '西药处方',
-          drugName: '酮替芬',
-          drugJx: '吸入剂',
-          drugNumber: 'L20030000032b'
-        }],
-        citys:[],
-        value2:'',
-        medicines:[]
+      citys:[],
+      value2:'',
+      medicines:[],
+      totalElements:null,
+      drugName:'',
+      page:0
     };
   },
   methods:{
@@ -178,12 +126,30 @@ export default {
         this.citys = res.data;
       })
     },
-    getAllMedicine(){
-      const initParams={
-        page:0
-      }
-      this.$axios.get(`/api/medicine/getAll/${initParams.page}`).then(res => {
+    getAllMedicine(params){
+      this.$axios.get(`/api/medicine/getAll/${params.page}`).then(res => {
        this.medicines = res.data.content;
+       this.totalElements = res.data.totalElements;
+      })
+    },
+    handleSizeChange(){
+
+    },
+    handleCurrentChange(val){  
+      this.page = val-1;
+       this.getAllMedicine({ page:val-1});
+    },
+    onSubmit(){ 
+      console.log(this.page)
+        this.$axios.get(`/api/medicine/getReimburseMedicine`,{
+          params:{
+            cityId:this.value2,
+            medicineName:this.drugName,
+            page:this.page
+          }
+        }).then(res => {
+        this.medicines = res.data.content;
+        this.totalElements = res.data.totalElements;
       })
     }
   },
@@ -192,7 +158,9 @@ export default {
   ,
   mounted() {
    this.getCitys();
-   this.getAllMedicine();
+   this.getAllMedicine({
+        page:0
+      });
   },
 };
 </script>
