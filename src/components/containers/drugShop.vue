@@ -64,7 +64,7 @@
                 
               </el-col>
             </el-row>
-            <div class="pagination">
+            <div class="pagination fr" style="margin:calc(30/1080*100vh) 0">
                 <el-pagination
                 @current-change="handleCurrentChange"
                 :page-sizes="[8, 16, 24, 32]"
@@ -123,7 +123,7 @@ export default {
         const params = {
           hotFlag:'Y',
           page,
-          size:8
+          pageSize:8
         }
         this.getMedicineByHotFlag(params);
       },
@@ -133,7 +133,7 @@ export default {
       const initParams = {
         hotFlag:'Y',
         page:0,
-        size:8
+        pageSize:8
       }
       this.getMedicineByHotFlag(initParams);
   }

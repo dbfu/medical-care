@@ -4,7 +4,7 @@
     <img  :src='getImgSrc' style='width:calc(206/1920*100vw);height:208px' />
   
     <div class="drug-name" >{{drugInfo.medicineName.genericName}}</div>
-    <div class="drug-price">¥<span style="font-size: calc(26/1920*100vw);">{{drugInfo.price}}</span>/瓶</div>
+    <div class="drug-price">¥<span style="font-size: calc(26/1920*100vw);">{{drugInfo.price}}</span>/{{drugInfo.saleUnit}}</div>
     <div class="drug-desc" >
       <div class="desc-title">
         <span>适应症</span>
