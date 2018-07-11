@@ -1,9 +1,9 @@
 <template>
   <!-- width:calc(206/1920*100vw);height:calc(200/1080*100vh) -->
-  <div :class="{'drug-card-box': true,'drug-card-box-selected':showDesc}" >
-    <img  :src='getImgSrc' style='width:calc(206/1920*100vw);height:208px' />
+  <div :class="{'drug-card-box': true,'drug-card-box-selected':showDesc}">
+    <img  :src='getImgSrc' style='width:100%;height:calc(200/1080*100vh)' />
   
-    <div class="drug-name" >{{drugInfo.medicineName.genericName}}</div>
+    <div class="drug-name">{{drugInfo.medicineName.genericName}}</div>
     <div class="drug-price">¥<span style="font-size: calc(26/1920*100vw);">{{drugInfo.price}}</span>/{{drugInfo.saleUnit}}</div>
     <div class="drug-desc" >
       <div class="desc-title">
@@ -54,6 +54,8 @@ export default {
 .drug-name {
   font-size: calc(16/1920*100vw);
   margin-top: calc(28/1080*100vh);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .drug-price {
   color: #f05f5f;
@@ -100,7 +102,7 @@ export default {
 .drug-card-box:hover .drug-desc{
   /* display: inline-block; */
   opacity: .6;
-  transition: opacity 2s;
+  transition: opacity 1s;
 }
 </style>
 

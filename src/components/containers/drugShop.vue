@@ -58,7 +58,7 @@
           <div class="drug-list">
             <el-row :gutter="20">
               <el-col :span="6" v-for="item in hotFlag" >
-                <div>
+                <div style="margin-bottom:20px">
                   <DrugCard  :drugInfo='item'></DrugCard>
                 </div>
                 
