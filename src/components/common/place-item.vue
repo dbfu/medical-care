@@ -1,18 +1,18 @@
 <template>
   <div class="item-box">
-    <img src="../../assets/images/0009.jpg" />
+    <img :src='getImgSrc' />
     <div class="right-box">
       <div class="item-title">
-        国大控股国大药房（深圳）连锁有限公司蛇口新街分店
+        {{datas.name}}
       </div>
       <div class="item-desc">
         <div class="item-place">
           <i class="el-icon-location-outline"></i>
-          <span>南山区蛇口新街曙光花园19-20号</span>
+          <span>{{datas.address}}</span>
         </div>
         <div class="item-place">
           <i class="el-icon-phone-outline"></i>
-          <span>236584</span>
+          <span>{{datas.telephone}}</span>
         </div>
         <div class="item-place">
           <i class="el-icon-bell"></i>
@@ -23,7 +23,17 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  props:{
+    datas:{},
+  },
+  computed:{
+    getImgSrc(){
+      const datas = this.datas;
+      return `http://${datas.fileServerIp}:${datas.fileServerPort}${datas.fileServerPath}${datas.imgUrl}`;
+    }
+  }
+};
 </script>
 <style scoped>
 .item-box {
@@ -53,7 +63,7 @@ export default {};
   bottom: 0;
   height: 150px;
   display: flex;
-  flex-direction: column;;
+  flex-direction: column;
 }
 .item-place {
   font-family: PingFangSC-Regular;

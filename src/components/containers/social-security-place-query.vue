@@ -8,23 +8,34 @@
     </div>
     <div class="tabel-box">
       <div class="table-header">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form :inline="true"  class="demo-form-inline">
           <el-form-item label="所在城市">
-            <el-select>
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+            <el-select v-model="selectCity" @change='chanegCity'> 
+              <el-option 
+              v-for="item in citys"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="所在区域">
-            <el-select>
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+            <el-select v-model='selectArea'>
+              <el-option
+              v-for="item in areas"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          
             </el-select>
           </el-form-item>
           <el-form-item label="类型">
-            <el-select>
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+            <el-select v-model='type'>
+              <el-option v-for="item in types"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <span style="margin: 0 40px;"></span>
@@ -33,16 +44,20 @@
           </el-form-item>
         </el-form>
         <div style="margin-top: 10px;"></div>
-        <div class="result-box">
-          <PlaceCard></PlaceCard>
-          <PlaceCard></PlaceCard>
-          <PlaceCard></PlaceCard>
-          <PlaceCard></PlaceCard>
-          <PlaceCard></PlaceCard>
-          <PlaceCard></PlaceCard>
-          <PlaceCard></PlaceCard>
-          <PlaceCard></PlaceCard>
+        <div class="result-box" v-for="item in infos" :key='item.id'>
+          <PlaceCard :datas="item" ></PlaceCard>
+    
         </div>
+          <div class="pagination">
+            <el-pagination
+            @current-change="handleCurrentChange"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="10"
+            layout=" prev, pager,next,sizes,total"
+              background
+              :total="totalElements">
+            </el-pagination>
+          </div>
       </div>
     </div>
   </div>
@@ -61,40 +76,69 @@ export default {
   },
   data() {
     return {
-      data: [
-        {
-          id: 1,
-          type: "养老保险",
-          person: "240.00(8%)",
-          company: "420.00(14%)"
+      types:[{
+        id:0,
+        name:'医院'
+      },{
+        id:1,
+        name:'药房'
+      }],
+      index: 1,
+      infos:[],
+      citys:[],
+      areas:[],
+      selectCity:'',
+      selectArea:'',
+      type:'',
+      page:0,
+      initParams : {
+            page:0,
+            addressId:null,
+            type:null
+          }
+    }
+  },
+  mounted(){
+    this.getAllList();
+    this.getCitys({parentId:0});
+  },
+  methods:{
+      getCitys(params){
+          this.$axios.get(`/api/socialInsuranceAgency/getAddress/${params.parentId}`).then(res => {
+            if(params.parentId==0){
+               this.citys = res.data;
+            }else{
+              this.areas = res.data;
+            }
+         
+        })
+      },
+      getAllList(){
+          const initParams = this.initParams;
+          this.$axios.get(`/api/socialInsuranceAgency/getAll/${initParams.page}/${initParams.addressId}/${initParams.type}`,{params:initParams})
+          .then(res => {
+               this.infos = res.data.content;
+            })
         },
-        {
-          id: 2,
-          type: "医疗保险",
-          person: "240.00(8%)",
-          company: "420.00(14%)"
+        chanegCity(v){
+          this.selectArea='';
+          this.getCitys({parentId:v})
         },
-        {
-          id: 3,
-          type: "失业保险",
-          person: "240.00(8%)",
-          company: "420.00(14%)"
+        onSubmit(){
+          let initParams = this.initParams;
+          initParams.page=this.page;
+          initParams.addressId=this.selectArea;
+          initParams.type=this.type;
+          this.getAllList();
         },
-        {
-          id: 4,
-          type: "工伤保险",
-          person: "240.00(8%)",
-          company: "420.00(14%)"
-        },
-        {
-          id: 5,
-          type: "生育保险",
-          person: "240.00(8%)",
-          company: "420.00(14%)"
-        }
-      ],
-      index: 1
-    };
+        handleCurrentChange(val){  
+          const page = val-1;
+          let initParams = this.initParams;
+          initParams.page=page;
+          initParams.addressId=this.selectArea;
+          initParams.type=this.type;
+          this.getAllList();
+      },
   }
 };
 </script>
@@ -160,5 +204,11 @@ export default {
 .column {
   color: #333;
   font-size: 16px;
+}
+.pagination{
+  margin-top: calc(10/1080*100vh);
+ /*  margin-left: 50%;
+  transform: translate(-50%); */
+  float: right;
 }
 </style>
