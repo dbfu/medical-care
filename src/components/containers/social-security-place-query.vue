@@ -91,6 +91,7 @@ export default {
       selectArea:'',
       type:'',
       page:0,
+      totalElements:null,
       initParams : {
             page:0,
             addressId:null,
@@ -118,6 +119,7 @@ export default {
           this.$axios.get(`/api/socialInsuranceAgency/getAll/${initParams.page}/${initParams.addressId}/${initParams.type}`,{params:initParams})
           .then(res => {
                this.infos = res.data.content;
+               this.totalElements = res.data.totalElements;
             })
         },
         chanegCity(v){
@@ -135,8 +137,8 @@ export default {
           const page = val-1;
           let initParams = this.initParams;
           initParams.page=page;
-          initParams.addressId=this.selectArea;
-          initParams.type=this.type;
+          initParams.addressId=this.selectArea || null;
+          initParams.type=this.type || null;
           this.getAllList();
       },
   }
