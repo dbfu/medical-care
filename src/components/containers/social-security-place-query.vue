@@ -45,7 +45,7 @@
         </el-form>
         <div style="margin-top: 10px;"></div>
         <div class="result-box" v-for="item in infos" :key='item.id'>
-          <PlaceCard :datas="item" ></PlaceCard>
+          <PlaceCard :datas="item"></PlaceCard>
     
         </div>
           <div class="pagination">
@@ -92,6 +92,7 @@ export default {
       type:'',
       page:0,
       totalElements:null,
+      newHotDrugs:'',
       initParams : {
             page:0,
             addressId:null,
@@ -102,6 +103,7 @@ export default {
   mounted(){
     this.getAllList();
     this.getCitys({parentId:0});
+    // this.getHotDrug();
   },
   methods:{
       getCitys(params){
@@ -141,7 +143,17 @@ export default {
           initParams.type=this.type || null;
           this.getAllList();
       },
-  }
+      // getHotDrug(){
+      //     const medicines = this.infos.medicines;
+      //     let hotDrugs = [];
+      //     medicines.map(item=>{
+      //       hotDrugs.push(item.medicineName.genericName);
+      //     })
+      //     this.newHotDrugs = hotDrugs.join('|');
+      //     this.newHotDrugs = this.newHotDrugs.subString(0,newHotDrugs.Length-1);
+      // }
+  },
+
 };
 </script>
 <style scoped>

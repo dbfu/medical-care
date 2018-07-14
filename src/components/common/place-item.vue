@@ -16,7 +16,7 @@
         </div>
         <div class="item-place">
           <i class="el-icon-bell"></i>
-          <span>热卖药品：白加黑 | 感冒药 | 社保卡可购买</span>
+          <span>热卖药品：</span> <span v-text='getHotDrug'></span>
         </div>
       </div>
     </div>
@@ -26,11 +26,26 @@
 export default {
   props:{
     datas:{},
+    newHotDrugs:''
   },
+  methods:{
+
+  }
+  ,
   computed:{
     getImgSrc(){
       const datas = this.datas;
       return `http://${datas.fileServerIp}:${datas.fileServerPort}${datas.fileServerPath}${datas.imgUrl}`;
+    },
+    getHotDrug(){
+      const medicines = this.datas.medicines || [];
+      let hotDrugs = [];
+      medicines.map(item=>{
+        if(item.medicineName.genericName)
+        hotDrugs.push(item.medicineName.genericName);
+      })
+     let newHotDrugs = hotDrugs.length>1?hotDrugs.join('|').subString(0,hotDrugs.length-1):hotDrugs.toString();
+     return  newHotDrugs;
     }
   }
 };
