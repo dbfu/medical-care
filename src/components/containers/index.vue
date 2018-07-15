@@ -234,14 +234,14 @@ export default {
     };
   },
   mounted() {
-    this.$axios.get("/api/hospital/getAll/0").then(res => {
+    this.$axios.get("http://47.104.99.233:8083/hospital/getAll/0").then(res => {
       console.log(res.data);
     });
-    this.$axios.get("/api/category/getAll/0").then(res => {
+    this.$axios.get("http://47.104.99.233:8083/category/getAll/0").then(res => {
       this.categorys = res.data.content.slice(0, 4);
       this.selected = this.categorys[0];
     });
-    this.$axios.get("/api/hospital/getHot/0").then(res => {
+    this.$axios.get("http://47.104.99.233:8083/hospital/getHot/0").then(res => {
       res.data.content.map(item => {
         item.imageUrl = `http://${item.fileServerIp}:${item.fileServerPort}${
           item.fileServerPath
@@ -257,7 +257,7 @@ export default {
     },
     login() {
       this.$axios
-        .post("/api/user/login", { name: this.user, password: this.pass })
+        .post("http://47.104.99.233:8083/user/login", { name: this.user, password: this.pass })
         .then(res => {
           if (!res.data) {
             this.$message.error("账户或用户名错误！");
@@ -274,7 +274,7 @@ export default {
       if (index === this.currentTab) return;
       this.currentTab = index;
       if (index === 1) {
-        this.$axios.get("/api/hospital/getHot/0").then(res => {
+        this.$axios.get("http://47.104.99.233:8083/hospital/getHot/0").then(res => {
           res.data.map(item => {
             item.imageUrl = `http://${item.fileServerIp}:${
               item.fileServerPort
@@ -287,7 +287,7 @@ export default {
         });
       }
       if (index === 2) {
-        this.$axios.get("/api/doctor/getHot/0").then(res => {
+        this.$axios.get("http://47.104.99.233:8083/doctor/getHot/0").then(res => {
           res.data.map(item => {
             item.imageUrl = `http://${item.fileServerIp}:${
               item.fileServerPort
@@ -299,7 +299,7 @@ export default {
       }
       if (index === 3) {
         this.$axios
-          .get("/api/information/getHot?hotFlag=Y&page=0")
+          .get("http://47.104.99.233:8083/information/getHot?hotFlag=Y&page=0")
           .then(res => {
             res.data.map(item => {
               item.imageUrl = `http://${item.fileServerIp}:${

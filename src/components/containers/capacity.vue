@@ -171,7 +171,7 @@ export default {
   methods:{
     getAllIndication(){
       const page = 0;
-      this.$axios.get(`/apiindication/getAll/${page}`).then(res => {
+      this.$axios.get(`http://47.104.99.233:8083/indication/getAll/${page}`).then(res => {
             this.indications = res.data.content;
       })
     }
@@ -181,7 +181,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .box{
   background-color: #f4f4f4;
 }

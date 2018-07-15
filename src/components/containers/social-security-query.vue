@@ -103,7 +103,7 @@ export default {
     };
   },
   mounted() {
-    this.$axios.get("/api/socialInsurancePolicy/allcitys").then(res => {
+    this.$axios.get("http://47.104.99.233:8083/socialInsurancePolicy/allcitys").then(res => {
       this.city = res.data;
     });
   },
@@ -111,7 +111,7 @@ export default {
     getList() {
       this.$axios
         .get(
-          `/api/socialInsurancePolicy/socialInsurancePolicyVo/${
+          `http://47.104.99.233:8083/socialInsurancePolicy/socialInsurancePolicyVo/${
             this.minCardinality
           }/${this.cityId}`
         )

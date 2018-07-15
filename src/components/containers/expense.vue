@@ -122,12 +122,12 @@ export default {
   },
   methods:{
     getCitys(){
-        this.$axios.get("/api/socialInsurancePolicy/allcitys").then(res => {
+        this.$axios.get("http://47.104.99.233:8083/socialInsurancePolicy/allcitys").then(res => {
         this.citys = res.data;
       })
     },
     getAllMedicine(params){
-      this.$axios.get(`/api/medicine/getAll/${params.page}`).then(res => {
+      this.$axios.get(`http://47.104.99.233:8083/medicine/getAll/${params.page}`).then(res => {
        this.medicines = res.data.content;
        this.totalElements = res.data.totalElements;
       })
@@ -141,7 +141,7 @@ export default {
     },
     onSubmit(){ 
       console.log(this.page)
-        this.$axios.get(`/api/medicine/getReimburseMedicine`,{
+        this.$axios.get(`http://47.104.99.233:8083/medicine/getReimburseMedicine`,{
           params:{
             cityId:this.value2,
             medicineName:this.drugName,

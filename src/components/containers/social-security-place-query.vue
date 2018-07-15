@@ -107,7 +107,7 @@ export default {
   },
   methods:{
       getCitys(params){
-          this.$axios.get(`/api/socialInsuranceAgency/getAddress/${params.parentId}`).then(res => {
+          this.$axios.get(`http://47.104.99.233:8083/socialInsuranceAgency/getAddress/${params.parentId}`).then(res => {
             if(params.parentId==0){
                this.citys = res.data;
             }else{
@@ -118,7 +118,7 @@ export default {
       },
       getAllList(){
           const initParams = this.initParams;
-          this.$axios.get(`/api/socialInsuranceAgency/getAll/${initParams.page}/${initParams.addressId}/${initParams.type}`,{params:initParams})
+          this.$axios.get(`http://47.104.99.233:8083/socialInsuranceAgency/getAll/${initParams.page}/${initParams.addressId}/${initParams.type}`,{params:initParams})
           .then(res => {
                this.infos = res.data.content;
                this.totalElements = res.data.totalElements;

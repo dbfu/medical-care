@@ -99,13 +99,13 @@ export default {
   methods: {
     getCategory() {
       const page = 0;
-      this.$axios.get(`/api/category/getAll/${page}`).then(res => {
+      this.$axios.get(`http://47.104.99.233:8083/category/getAll/${page}`).then(res => {
         this.categorys = res.data.content;
       });
     },
     getMedicineByHotFlag(params) {
       this.$axios
-        .get(`/api/medicine/getMedicineByHotFlag`, { params: params })
+        .get(`http://47.104.99.233:8083/medicine/getMedicineByHotFlag`, { params: params })
         .then(res => {
           this.hotFlag = res.data.content;
           this.totalElements = res.data.totalElements;
