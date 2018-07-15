@@ -127,7 +127,7 @@ export default {
       })
     },
     getAllMedicine(params){
-      this.$axios.get(`http://47.104.99.233:8083/medicine/getAll/${params.page}`).then(res => {
+      this.$axios.get(`http://47.104.99.233:8083/medicine/getReimburseMedicine`,{params}).then(res => {
        this.medicines = res.data.content;
        this.totalElements = res.data.totalElements;
       })
@@ -140,7 +140,6 @@ export default {
        this.getAllMedicine({ page:val-1});
     },
     onSubmit(){ 
-      console.log(this.page)
         this.$axios.get(`http://47.104.99.233:8083/medicine/getReimburseMedicine`,{
           params:{
             cityId:this.value2,
