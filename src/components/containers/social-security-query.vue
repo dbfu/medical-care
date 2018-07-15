@@ -8,7 +8,7 @@
     </div>
     <div class="tabel-box">
       <div class="table-header">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form :inline="true" class="demo-form-inline">
           <el-form-item label="缴费城市">
             <el-select v-model="cityId">
               <el-option v-for="item in city" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -18,7 +18,7 @@
             <el-input v-model="minCardinality"></el-input>
           </el-form-item>
           <el-form-item label="最低缴费基数">
-            <span style="color: #2873C8;">500元</span>
+            <span style="color: #2873C8;">{{amount}}</span>
           </el-form-item>
           <span style="margin: 0 40px;"></span>
           <el-form-item>
@@ -34,7 +34,11 @@
           <el-table-column align="center" label="公司" prop="company"></el-table-column>
         </el-table>
         <div class="table-footer">
-          <span>缴纳总额：<span style="color: green;">{{totallAmount}}</span> 个人缴纳: <span style="color: green;">{{personTotallAmount}}</span> 单位缴纳: <span style="color: green;">{{companyTotallAmount}}</span></span>
+          <span>缴纳总额：
+            <span style="color: green;">{{totallAmount}}</span> 个人缴纳:
+            <span style="color: green;">{{personTotallAmount}}</span> 单位缴纳:
+            <span style="color: green;">{{companyTotallAmount}}</span>
+          </span>
         </div>
       </div>
     </div>
@@ -67,13 +71,13 @@
       </div>
       <el-row style="padding: 20px 30px;" :gutter="40">
         <el-col :span="8">
-          <HealthCard color="#479DFE"></HealthCard>
+          <HealthCard image="1" color="#479DFE"></HealthCard>
         </el-col>
         <el-col :span="8">
-          <HealthCard color="#DBB17E"></HealthCard>
+          <HealthCard image="2" color="#DBB17E"></HealthCard>
         </el-col>
         <el-col :span="8">
-          <HealthCard color="#46F072"></HealthCard>
+          <HealthCard image="3" color="#46F072"></HealthCard>
         </el-col>
       </el-row>
     </div>
@@ -95,23 +99,31 @@ export default {
       index: 1,
       city: [],
       cityId: "",
-      minCardinality: 500,
+      minCardinality: 0,
       types: ["养老保险", "医疗", "失业", "工伤", "生育"],
       totallAmount: 0,
       personTotallAmount: 0,
-      companyTotallAmount: 0
+      companyTotallAmount: 0,
+      amount: 0
     };
   },
   mounted() {
-    this.$axios.get("http://47.104.99.233:8083/socialInsurancePolicy/allcitys").then(res => {
+    this.$axios.get("api/socialInsurancePolicy/allcitys").then(res => {
       this.city = res.data;
     });
+  },
+  watch: {
+    cityId(val) {
+      var model = this.city.find(o => o.id === val);
+      this.amount = model.minCardinality;
+      this.minCardinality = model.minCardinality;
+    }
   },
   methods: {
     getList() {
       this.$axios
         .get(
-          `http://47.104.99.233:8083/socialInsurancePolicy/socialInsurancePolicyVo/${
+          `api/socialInsurancePolicy/socialInsurancePolicyVo/${
             this.minCardinality
           }/${this.cityId}`
         )
@@ -137,7 +149,9 @@ export default {
           ).toFixed(2);
 
           this.data = list;
-        });
+        }).catch(error => {
+          this.$message.error(error.response.data);
+        })
     },
     onSubmit() {
       this.getList();

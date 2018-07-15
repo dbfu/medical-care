@@ -135,7 +135,7 @@
           <div class="left-box">
             <span class="content-title">适用症状</span>
             <ul class="content-nav">
-              <li @click="select(item)" v-for="item in categorys" :class="{selected:selected.id == item.id}" :key="item.id">{{item.categoryName}}</li>
+              <li @click="select(item)" v-for="item in categorys" :class="{selected:selected.id == item.id}" :key="item.id">{{item.indicationName}}</li>
             </ul>
           </div>
           <div class="content-search-box">
@@ -144,7 +144,7 @@
         </div>
         <div class="drug-list">
           <el-row :gutter="20">
-            <el-col v-for="item in selected.medicine" :key="item.id" :span="6">
+            <el-col v-for="item in medicines" :key="item.id" :span="6">
               <DrugCard :drugInfo='item'></DrugCard>
             </el-col>
           </el-row>
@@ -234,14 +234,20 @@ export default {
     };
   },
   mounted() {
-    this.$axios.get("http://47.104.99.233:8083/hospital/getAll/0").then(res => {
+    this.$axios.get("api/hospital/getAll/0").then(res => {
       console.log(res.data);
     });
-    this.$axios.get("http://47.104.99.233:8083/category/getAll/0").then(res => {
+    this.$axios.get("api/indication/getAll/0").then(res => {
       this.categorys = res.data.content.slice(0, 4);
       this.selected = this.categorys[0];
+
+      this.$axios
+        .get(`/api/medicine/getByIndication/${this.selected.id}/0`)
+        .then(res => {
+          this.medicines = res.data.content.splice(0, 4);
+        });
     });
-    this.$axios.get("http://47.104.99.233:8083/hospital/getHot/0").then(res => {
+    this.$axios.get("api/hospital/getHot/0").then(res => {
       res.data.content.map(item => {
         item.imageUrl = `http://${item.fileServerIp}:${item.fileServerPort}${
           item.fileServerPath
@@ -250,6 +256,16 @@ export default {
 
       this.hospitals = res.data.content;
     });
+
+    this.$axios.get("api/hospital/getHot/0").then(res => {
+      res.data.map(item => {
+        item.imageUrl = `http://${item.fileServerIp}:${item.fileServerPort}${
+          item.fileServerPath
+        }${item.imageUrl}`;
+      });
+
+      this.hospitals = res.data.splice(0, 3);
+    });
   },
   methods: {
     skip(path) {
@@ -257,7 +273,7 @@ export default {
     },
     login() {
       this.$axios
-        .post("http://47.104.99.233:8083/user/login", { name: this.user, password: this.pass })
+        .post("api/user/login", { name: this.user, password: this.pass })
         .then(res => {
           if (!res.data) {
             this.$message.error("账户或用户名错误！");
@@ -268,26 +284,29 @@ export default {
         });
     },
     select(item) {
+      this.$axios
+        .get(`/api/medicine/getByIndication/${item.id}/0`)
+        .then(res => {
+          this.medicines = res.data.content.splice(0, 4);
+        });
       this.selected = item;
     },
     selectHot(index) {
       if (index === this.currentTab) return;
       this.currentTab = index;
       if (index === 1) {
-        this.$axios.get("http://47.104.99.233:8083/hospital/getHot/0").then(res => {
+        this.$axios.get("api/hospital/getHot/0").then(res => {
           res.data.map(item => {
             item.imageUrl = `http://${item.fileServerIp}:${
               item.fileServerPort
             }${item.fileServerPath}${item.imageUrl}`;
           });
 
-          console.log(res.data);
-
           this.hospitals = res.data.splice(0, 3);
         });
       }
       if (index === 2) {
-        this.$axios.get("http://47.104.99.233:8083/doctor/getHot/0").then(res => {
+        this.$axios.get("api/doctor/getHot/0").then(res => {
           res.data.map(item => {
             item.imageUrl = `http://${item.fileServerIp}:${
               item.fileServerPort
@@ -298,17 +317,15 @@ export default {
         });
       }
       if (index === 3) {
-        this.$axios
-          .get("http://47.104.99.233:8083/information/getHot?hotFlag=Y&page=0")
-          .then(res => {
-            res.data.map(item => {
-              item.imageUrl = `http://${item.fileServerIp}:${
-                item.fileServerPort
-              }${item.fileServerPath}${item.imgUrl}`;
-            });
-
-            this.hospitals = res.data.splice(0, 3);
+        this.$axios.get("api/information/getHot?hotFlag=Y&page=0").then(res => {
+          res.data.map(item => {
+            item.imageUrl = `http://${item.fileServerIp}:${
+              item.fileServerPort
+            }${item.fileServerPath}${item.imgUrl}`;
           });
+
+          this.hospitals = res.data.splice(0, 3);
+        });
       }
     }
   }

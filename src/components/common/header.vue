@@ -107,7 +107,6 @@ export default {
 .nav li {
   flex: 1;
   font-size: 18px;
-  font-weight: bold;
   text-align: center;
   cursor: pointer;
 }

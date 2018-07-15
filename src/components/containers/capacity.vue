@@ -171,7 +171,7 @@ export default {
   methods:{
     getAllIndication(){
       const page = 0;
-      this.$axios.get(`http://47.104.99.233:8083/indication/getAll/${page}`).then(res => {
+      this.$axios.get(`api/indication/getAll/${page}`).then(res => {
             this.indications = res.data.content;
       })
     }
@@ -299,6 +299,25 @@ export default {
 }
 .contanier[data-v-f7fb3e28] {
   margin-top: calc(20/1080*100vh);
+}
+.illness-box {
+  position: relative;
+}
+.text-bg {
+  position: absolute;
+  width: 80px;
+  right: 0;
+  height: 22px;
+}
+.illness-name {
+  display: block;
+  position: absolute;
+  text-align: center;
+  color: #fff;
+  right: 0;
+  font-size: 12px;
+  width: 80px;
+  line-height: 22px;
 }
 </style>
 
