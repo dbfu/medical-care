@@ -9,14 +9,13 @@
     <div class="tabel-box">
       <div class="table-header">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item  label="缴费城市">
-            <el-select>
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+          <el-form-item label="缴费城市">
+            <el-select v-model="cityId">
+              <el-option v-for="item in city" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="缴费基数">
-            <el-input></el-input>
+            <el-input v-model="minCardinality"></el-input>
           </el-form-item>
           <el-form-item label="最低缴费基数">
             <span style="color: #2873C8;">500元</span>
@@ -35,7 +34,7 @@
           <el-table-column align="center" label="公司" prop="company"></el-table-column>
         </el-table>
         <div class="table-footer">
-          <span>缴纳总额：984.90 个人缴纳（元）：315.00 单位缴纳（元）：669.90</span>
+          <span>缴纳总额：<span style="color: green;">{{totallAmount}}</span> 个人缴纳: <span style="color: green;">{{personTotallAmount}}</span> 单位缴纳: <span style="color: green;">{{companyTotallAmount}}</span></span>
         </div>
       </div>
     </div>
@@ -92,40 +91,57 @@ export default {
   },
   data() {
     return {
-      data: [
-        {
-          id: 1,
-          type: "养老保险",
-          person: "240.00(8%)",
-          company: "420.00(14%)"
-        },
-        {
-          id: 2,
-          type: "医疗保险",
-          person: "240.00(8%)",
-          company: "420.00(14%)"
-        },
-        {
-          id: 3,
-          type: "失业保险",
-          person: "240.00(8%)",
-          company: "420.00(14%)"
-        },
-        {
-          id: 4,
-          type: "工伤保险",
-          person: "240.00(8%)",
-          company: "420.00(14%)"
-        },
-        {
-          id: 5,
-          type: "生育保险",
-          person: "240.00(8%)",
-          company: "420.00(14%)"
-        }
-      ],
-      index: 1
+      data: [],
+      index: 1,
+      city: [],
+      cityId: "",
+      minCardinality: 500,
+      types: ["养老保险", "医疗", "失业", "工伤", "生育"],
+      totallAmount: 0,
+      personTotallAmount: 0,
+      companyTotallAmount: 0
     };
+  },
+  mounted() {
+    this.$axios.get("/api/socialInsurancePolicy/allcitys").then(res => {
+      this.city = res.data;
+    });
+  },
+  methods: {
+    getList() {
+      this.$axios
+        .get(
+          `/api/socialInsurancePolicy/socialInsurancePolicyVo/${
+            this.minCardinality
+          }/${this.cityId}`
+        )
+        .then(res => {
+          let list = res.data.list || [];
+
+          list.map(item => {
+            item.type = this.types[item.type - 1];
+            item.person =
+              Number(item.personAmount).toFixed(2) +
+              `(${item.personRate || 0}%)`;
+            item.company =
+              Number(item.companyAmount).toFixed(2) +
+              `(${item.companyRate || 0}%)`;
+          });
+
+          this.totallAmount = Number(res.data.totallAmount || 0).toFixed(2);
+          this.personTotallAmount = Number(
+            res.data.personTotallAmount || 0
+          ).toFixed(2);
+          this.companyTotallAmount = Number(
+            res.data.companyTotallAmount || 0
+          ).toFixed(2);
+
+          this.data = list;
+        });
+    },
+    onSubmit() {
+      this.getList();
+    }
   }
 };
 </script>

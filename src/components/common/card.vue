@@ -47,7 +47,6 @@ export default {
   background-color: rgba(22, 101, 192, 1);
   vertical-align: middle;
   margin-right: 10px;
-  margin-top: 12px;
 }
 .text {
   font-size: 18px;

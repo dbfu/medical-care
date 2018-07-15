@@ -1,22 +1,22 @@
 <template>
   <div>
-    <Header>hello</Header>
+    <Header :userName="logined?user:''"></Header>
     <el-carousel style="padding: 0 70px;" height="550px">
       <el-carousel-item v-for="item in 4" :key="item">
         <img src="../../assets/images/luobo.png">
       </el-carousel-item>
     </el-carousel>
-    <div class="login-box">
+    <div v-if="!logined" class="login-box">
       <div style="border-top-left-radius: 4px;border-top-right-radius: 4px;line-height: 48px; text-align: center; background-color: #479dfe;color: #fff;">用户登录</div>
       <div style="padding: 28px 20px;">
-        <el-input placeholder="请输入用户名">
+        <el-input v-model="user" placeholder="请输入用户名">
           <i slot="prefix" class="el-input__icon el-icon-mobile-phone"></i>
         </el-input>
         <div style="margin: 20px 0;"></div>
-        <el-input placeholder="请输入密码">
+        <el-input v-model="pass" auto-complete="off" type="password" placeholder="请输入密码">
           <i slot="prefix" class="el-input__icon el-icon-goods"></i>
         </el-input>
-        <el-button style="width: 100%; margin: 0 auto; margin-top:60px;" type="primary">登录</el-button>
+        <el-button @click="login" style="width: 100%; margin: 0 auto; margin-top:60px;" type="primary">登录</el-button>
       </div>
     </div>
     <Card title="常用服务">
@@ -135,10 +135,7 @@
           <div class="left-box">
             <span class="content-title">适用症状</span>
             <ul class="content-nav">
-              <li class="selected">糖尿病</li>
-              <li>高血压</li>
-              <li>高血脂</li>
-              <li>冠心病</li>
+              <li @click="select(item)" v-for="item in categorys" :class="{selected:selected.id == item.id}" :key="item.id">{{item.categoryName}}</li>
             </ul>
           </div>
           <div class="content-search-box">
@@ -147,17 +144,8 @@
         </div>
         <div class="drug-list">
           <el-row :gutter="20">
-            <el-col :span="6">
-              <DrugCard :showDesc="true"></DrugCard>
-            </el-col>
-            <el-col :span="6">
-              <DrugCard></DrugCard>
-            </el-col>
-            <el-col :span="6">
-              <DrugCard></DrugCard>
-            </el-col>
-            <el-col :span="6">
-              <DrugCard></DrugCard>
+            <el-col v-for="item in selected.medicine" :key="item.id" :span="6">
+              <DrugCard :drugInfo='item'></DrugCard>
             </el-col>
           </el-row>
         </div>
@@ -197,24 +185,16 @@
       <div slot="content" class="medical">
         <div class="medical-left-box">
           <ul class="medical-tab-box">
-            <li @click="currentTab=1" :class="{selected: currentTab === 1 }">热门医院</li>
-            <li @click="currentTab=2" :class="{selected: currentTab === 2 }">热门医生</li>
-            <li @click="currentTab=3" :class="{selected: currentTab === 3 }">热门咨询</li>
+            <li @click="selectHot(1)" :class="{selected: currentTab === 1 }">热门医院</li>
+            <li @click="selectHot(2)" :class="{selected: currentTab === 2 }">热门医生</li>
+            <li @click="selectHot(3)" :class="{selected: currentTab === 3 }">热门咨询</li>
           </ul>
         </div>
         <div class="medical-right-box">
           <el-row :gutter="20">
-            <el-col style="text-align: center;" :span="6">
-              <img style="height: 220px; width: 100%;margin-bottom: 10px;" src="../../assets/images/0000.jpg" />
-              <span style="color: #333;">上海市长江医院</span>
-            </el-col>
-            <el-col style="text-align: center;" :span="6">
-              <img style="height: 220px; width: 100%;margin-bottom: 10px;" src="../../assets/images/0000.jpg" />
-              <span style="color: #333;">上海市长江医院</span>
-            </el-col>
-            <el-col style="text-align: center;" :span="6">
-              <img style="height: 220px; width: 100%;margin-bottom: 10px;" src="../../assets/images/0000.jpg" />
-              <span style="color: #333;">上海市长江医院</span>
+            <el-col v-for="item in hospitals" :key="item.id" style="text-align: center;" :span="6">
+              <img style="height: 220px; width: 100%;margin-bottom: 10px;" :src="item.imageUrl" />
+              <span style="color: #333;">{{item.name}}</span>
             </el-col>
             <el-col style="text-align: center;" :span="6">
               <div class="more-button">查看更多</div>
@@ -243,22 +223,98 @@ export default {
   data() {
     return {
       currentTab: 1,
-      currentIndex: 2
+      currentIndex: 2,
+      user: "",
+      pass: "",
+      logined: false,
+      categorys: [],
+      selected: {},
+      medicines: [],
+      hospitals: []
     };
   },
   mounted() {
     this.$axios.get("/api/hospital/getAll/0").then(res => {
       console.log(res.data);
-    })
+    });
+    this.$axios.get("/api/category/getAll/0").then(res => {
+      this.categorys = res.data.content.slice(0, 4);
+      this.selected = this.categorys[0];
+    });
+    this.$axios.get("/api/hospital/getHot/0").then(res => {
+      res.data.content.map(item => {
+        item.imageUrl = `http://${item.fileServerIp}:${item.fileServerPort}${
+          item.fileServerPath
+        }${item.imgUrl}`;
+      });
+
+      this.hospitals = res.data.content;
+    });
   },
   methods: {
     skip(path) {
       this.$router.push({ path });
+    },
+    login() {
+      this.$axios
+        .post("/api/user/login", { name: this.user, password: this.pass })
+        .then(res => {
+          if (!res.data) {
+            this.$message.error("账户或用户名错误！");
+          } else {
+            this.logined = true;
+            this.$message.success("hello " + this.user);
+          }
+        });
+    },
+    select(item) {
+      this.selected = item;
+    },
+    selectHot(index) {
+      if (index === this.currentTab) return;
+      this.currentTab = index;
+      if (index === 1) {
+        this.$axios.get("/api/hospital/getHot/0").then(res => {
+          res.data.map(item => {
+            item.imageUrl = `http://${item.fileServerIp}:${
+              item.fileServerPort
+            }${item.fileServerPath}${item.imageUrl}`;
+          });
+
+          console.log(res.data);
+
+          this.hospitals = res.data.splice(0, 3);
+        });
+      }
+      if (index === 2) {
+        this.$axios.get("/api/doctor/getHot/0").then(res => {
+          res.data.map(item => {
+            item.imageUrl = `http://${item.fileServerIp}:${
+              item.fileServerPort
+            }${item.fileServerPath}${item.imgUrl}`;
+          });
+
+          this.hospitals = res.data.splice(0, 3);
+        });
+      }
+      if (index === 3) {
+        this.$axios
+          .get("/api/information/getHot?hotFlag=Y&page=0")
+          .then(res => {
+            res.data.map(item => {
+              item.imageUrl = `http://${item.fileServerIp}:${
+                item.fileServerPort
+              }${item.fileServerPath}${item.imgUrl}`;
+            });
+
+            this.hospitals = res.data.splice(0, 3);
+          });
+      }
     }
   }
 };
 </script>
-<style>
+<style scoped>
 .el-carousel__item img {
   width: 100%;
 }

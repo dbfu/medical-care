@@ -1,11 +1,11 @@
 <template>
   <div class="contanier">
     <div class="top-box">
-      <div class="left-box">太平洋保险首页</div>
-      <div class="right-box">请登陆 | 免费注册</div>
+      <div @click="index" class="left-box">太平洋保险首页</div>
+      <div class="right-box">{{ userName ? 'hello,' + userName : '请登陆 | 免费注册'}}</div>
     </div>
     <div class="bottom-box">
-      <div class="logo-box">
+      <div @click="index" class="logo-box">
         <img src="../../assets/images/logo.png" class="logo" />
       </div>
       <ul class="nav">
@@ -28,6 +28,17 @@ import Search from "../common/search";
 export default {
   components: {
     Search
+  },
+  props: {
+    userName: {
+      default: "",
+      type: String
+    }
+  },
+  methods: {
+    index() {
+      this.$router.push({ path: "/" });
+    }
   }
 };
 </script>
@@ -48,6 +59,7 @@ export default {
   font-size: 12px;
   color: #666666;
   padding-left: 70px;
+  cursor: pointer;
 }
 .right-box {
   color: #fff;

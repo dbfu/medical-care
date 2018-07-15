@@ -23,7 +23,6 @@
           </div>
         </div>
       </div>
-
     </div>
     <div class="nav-box">
       <ul class="nav">
@@ -57,22 +56,16 @@
         <div slot="content">
           <div class="drug-list">
             <el-row :gutter="20">
-              <el-col :span="6" v-for="item in hotFlag" >
+              <el-col :span="6" v-for="item in hotFlag">
                 <div>
-                  <DrugCard  :drugInfo='item'></DrugCard>
+                  <DrugCard :drugInfo='item'></DrugCard>
                 </div>
-                
+
               </el-col>
             </el-row>
             <div class="pagination fr" style="margin:calc(30/1080*100vh) 0">
-                <el-pagination
-                @current-change="handleCurrentChange"
-                :page-sizes="[8, 16, 24, 32]"
-                :page-size="8"
-                layout=" prev, pager,next,sizes,total"
-                  background
-                  :total="totalElements">
-                </el-pagination>
+              <el-pagination @current-change="handleCurrentChange" :page-sizes="[8, 16, 24, 32]" :page-size="8" layout=" prev, pager,next,sizes,total" background :total="totalElements">
+              </el-pagination>
             </div>
           </div>
         </div>
@@ -99,43 +92,45 @@ export default {
     return {
       currentTab: 1,
       currentIndex: 2,
-      categorys:[],
-      hotFlag:[],
-      totalElements:null
+      categorys: [],
+      hotFlag: [],
+      totalElements: null
     };
   },
-  methods:{ 
-      getCategory(){
-          const page = 0;
-          this.$axios.get(`/api/category/getAll/${page}`).then(res => {
-            this.categorys = res.data.content;
-        })
-      },
-      getMedicineByHotFlag(params){
-        this.$axios.get(`/api/medicine/getMedicineByHotFlag`,{params:params}).then(res => {
-            this.hotFlag = res.data.content;
-             this.totalElements = res.data.totalElements;
-            console.log(this.hotFlag)
-        })
-      },
-      handleCurrentChange(val){
-        const page = val-1;
-        const params = {
-          hotFlag:'Y',
-          page,
-          pageSize:8
-        }
-        this.getMedicineByHotFlag(params);
-      },
+  methods: {
+    getCategory() {
+      const page = 0;
+      this.$axios.get(`/api/category/getAll/${page}`).then(res => {
+        this.categorys = res.data.content;
+      });
+    },
+    getMedicineByHotFlag(params) {
+      this.$axios
+        .get(`/api/medicine/getMedicineByHotFlag`, { params: params })
+        .then(res => {
+          this.hotFlag = res.data.content;
+          this.totalElements = res.data.totalElements;
+          console.log(this.hotFlag);
+        });
+    },
+    handleCurrentChange(val) {
+      const page = val - 1;
+      const params = {
+        hotFlag: "Y",
+        page,
+        pageSize: 8
+      };
+      this.getMedicineByHotFlag(params);
+    }
   },
-  mounted(){
-      this.getCategory();
-      const initParams = {
-        hotFlag:'Y',
-        page:0,
-        pageSize:8
-      }
-      this.getMedicineByHotFlag(initParams);
+  mounted() {
+    this.getCategory();
+    const initParams = {
+      hotFlag: "Y",
+      page: 0,
+      pageSize: 8
+    };
+    this.getMedicineByHotFlag(initParams);
   }
 };
 </script>
@@ -151,36 +146,36 @@ export default {
   color: #3271c0;
 }
 .logo_r {
-  margin-left:calc(153/1920*100vw);
+  margin-left: calc(153 / 1920 * 100vw);
 }
 .search {
   position: relative;
 }
 .search input {
-  width: calc(809/1920*100vw);
-  height: calc(47/1080*100vh);
+  width: calc(809 / 1920 * 100vw);
+  height: calc(47 / 1080 * 100vh);
   outline: none;
-  border: calc(3/1080*100vh) solid #fa344d;
-  border-radius: calc(30/1920*100vw);
-  font-size: calc(22/1920*100vw);
+  border: calc(3 / 1080 * 100vh) solid #fa344d;
+  border-radius: calc(30 / 1920 * 100vw);
+  font-size: calc(22 / 1920 * 100vw);
   text-indent: 2em;
 }
 .search button {
-  width: calc(99/1920*100vw);
-  height: calc(47/1080*100vh);
+  width: calc(99 / 1920 * 100vw);
+  height: calc(47 / 1080 * 100vh);
   background: #fa344d;
-  border-radius: calc(34/1080*100vh);
+  border-radius: calc(34 / 1080 * 100vh);
   color: #fff;
-  font-size: calc(22/1080*100vh);
+  font-size: calc(22 / 1080 * 100vh);
   outline-style: none;
   list-style-type: none;
   border: none;
   position: absolute;
-  top: calc(3/1080*100vh);
-  right: calc(2/1920*100vw);
+  top: calc(3 / 1080 * 100vh);
+  right: calc(2 / 1920 * 100vw);
 }
 .hotwords {
-  margin-top: calc(6/1080*100vh);
+  margin-top: calc(6 / 1080 * 100vh);
   margin-left: 2em;
   color: #999;
 }
@@ -188,59 +183,59 @@ export default {
   color: #999;
 }
 .nav-box {
-  height: calc(47/1080*100vh);
+  height: calc(47 / 1080 * 100vh);
   background: #fa344d;
-  line-height: calc(47/1080*100vh);
+  line-height: calc(47 / 1080 * 100vh);
   width: 100%;
-  margin-top: calc(30/1080*100vh);
+  margin-top: calc(30 / 1080 * 100vh);
 }
 .nav {
-  margin-left: calc(650/1920*100vw);
+  margin-left: calc(650 / 1920 * 100vw);
 }
 .nav li {
   float: left;
-  font-size: calc(22/1080*100vh);
+  font-size: calc(22 / 1080 * 100vh);
   text-align: center;
   cursor: pointer;
-  margin-right: calc(30/1920*100vw);
+  margin-right: calc(30 / 1920 * 100vw);
   color: #fff;
 }
 .banner {
   position: relative;
 }
 .allShops {
-  width: calc(309/1920*100vw);
+  width: calc(309 / 1920 * 100vw);
   opacity: 0.7;
   background: #05314a;
   position: absolute;
-  top: calc(-47/1080*100vh);
+  top: calc(-47 / 1080 * 100vh);
   left: 0;
   z-index: 99999;
 }
 .allShops h3 {
   background: #cd0f25;
-  width: calc(309/1920*100vw);
-  height: calc(47/1080*100vh);
-  line-height: calc(47/1080*100vh);
+  width: calc(309 / 1920 * 100vw);
+  height: calc(47 / 1080 * 100vh);
+  line-height: calc(47 / 1080 * 100vh);
   text-align: center;
   color: #fff;
   font-weight: 700;
 }
 .allShops ul {
-  padding: calc(10/1080*100vh) 0 0 calc(45/1080*100vh);
+  padding: calc(10 / 1080 * 100vh) 0 0 calc(45 / 1080 * 100vh);
 }
 .allShops ul li {
-  height: calc(60/1080*100vh);
+  height: calc(60 / 1080 * 100vh);
 }
 .allShops ul li label {
   display: inline-block;
-  width: calc(80/1920*100vw);
-  font-size: calc(20/1920*100vw);
+  width: calc(80 / 1920 * 100vw);
+  font-size: calc(20 / 1920 * 100vw);
   color: #fff;
-  margin-right: calc(15/1920*100vw);
+  margin-right: calc(15 / 1920 * 100vw);
 }
 .allShops ul li span {
-  font-size: calc(16/1920*100vw);
+  font-size: calc(16 / 1920 * 100vw);
   color: #fff;
   cursor: pointer;
 }

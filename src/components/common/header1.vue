@@ -1,7 +1,7 @@
 <template>
   <div class="contanier">
     <div class="top-box">
-      <div class="left-box">太平洋保险首页</div>
+      <div @click="index" class="left-box">太平洋保险首页</div>
       <div class="right-box">请登陆 | 免费注册</div>
     </div>
   </div>
@@ -11,6 +11,11 @@ import Search from "../common/search";
 export default {
   components: {
     Search
+  },
+  methods: {
+    index() {
+      this.$router.push({ path: "/" });
+    }
   }
 };
 </script>
@@ -31,6 +36,7 @@ export default {
   font-size: 12px;
   color: #666666;
   padding-left: 50px;
+  cursor: pointer;
 }
 .right-box {
   color: #fff;

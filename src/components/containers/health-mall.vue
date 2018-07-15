@@ -1,7 +1,7 @@
 <template>
   <div class="contanier">
     <header>
-      <span>太平洋保险首页 | 太平洋旗下业务</span>
+      <span style="cursor: pointer;"  @click="index">太平洋保险首页 | 太平洋旗下业务</span>
       <span>请登录 | 免费注册</span>
     </header>
     <div class="page-title">
@@ -10,8 +10,8 @@
     <div class="content">
       <div class="list-box">
         <div class="title-box">
-          <div class="rect-small"></div>
           <div class="rect-bag"></div>
+          <div class="rect-small"></div>
           <span class="title">体检套餐</span>
           <div class="rect-small"></div>
           <div class="rect-bag"></div>
@@ -41,8 +41,8 @@
       </div>
       <div class="list-box">
         <div class="title-box">
-          <div class="rect-small"></div>
           <div class="rect-bag"></div>
+          <div class="rect-small"></div>
           <span class="title">商业保险</span>
           <div class="rect-small"></div>
           <div class="rect-bag"></div>
@@ -74,8 +74,8 @@
     <div class="content-bottom">
       <div class="list-box">
         <div class="title-box">
-          <div class="rect-small"></div>
           <div class="rect-bag"></div>
+          <div class="rect-small"></div>
           <span class="title">医疗器械</span>
           <div class="rect-small"></div>
           <div class="rect-bag"></div>
@@ -114,8 +114,8 @@
     <div class="content-bottom">
       <div class="list-box">
         <div class="title-box">
-          <div class="rect-small"></div>
           <div class="rect-bag"></div>
+          <div class="rect-small"></div>
           <span class="title">养生保健</span>
           <div class="rect-small"></div>
           <div class="rect-bag"></div>
@@ -146,13 +146,18 @@ export default {
   components: {
     HealthCard,
     ApparatusCard
+  },
+  methods: {
+    index() {
+      this.$router.push({ path: "/" });
+    }
   }
 };
 </script>
 <style scoped>
 .contanier {
   background: #efefef;
-  padding-bottom: 40px; 
+  padding-bottom: 40px;
 }
 header {
   background: #efefef;
