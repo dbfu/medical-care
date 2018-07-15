@@ -1,6 +1,8 @@
 <template>
   <div class="card-box">
-    <img src="../../assets/images/00015.jpg" />
+    <img v-if="image == 1" src="../../assets/images/0005.jpg" />
+    <img v-if="image == 2" src="../../assets/images/0003.jpg" />
+    <img v-if="image == 3" src="../../assets/images/0004.jpg" />
     <div :style="{backgroundColor: color}" class="card-desc">
       <span>健康体检卡B 致优套餐</span>
     </div>
@@ -12,7 +14,8 @@ export default {
     color: {
       default: "#13ba8e",
       type: String
-    }
+    },
+    image: String
   }
 };
 </script>

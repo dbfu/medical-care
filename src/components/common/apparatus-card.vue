@@ -1,7 +1,13 @@
 <template>
   <div class="card-box">
-    <img src="../../assets/images/00017.png" />
-    <div class="card-desc">轮椅</div>
+    <img v-if="type==1" src="../../assets/images/00018.jpg" />
+    <img v-if="type==2" src="../../assets/images/00019.jpg" />
+    <img v-if="type==3" src="../../assets/images/00020.jpg" />
+    <img v-if="type==4" src="../../assets/images/00021.jpg" />
+    <div v-if="type==1"  class="card-desc">轮椅</div>
+    <div v-if="type==2"  class="card-desc">绷带</div>
+    <div v-if="type==3"  class="card-desc">温度计</div>
+    <div v-if="type==4"  class="card-desc">药罐</div>
   </div>
 </template>
 <script>
@@ -10,7 +16,8 @@ export default {
     color: {
       default: "#13ba8e",
       type: String
-    }
+    },
+    type: String
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="contanier">
     <header>
-      <span style="cursor: pointer;"  @click="index">太平洋保险首页 | 太平洋旗下业务</span>
+      <span style="cursor: pointer;" @click="index">太平洋保险首页 | 太平洋旗下业务</span>
       <span>请登录 | 免费注册</span>
     </header>
     <div class="page-title">
@@ -18,24 +18,24 @@
         </div>
         <el-row style="margin-top: 20px;" :gutter="20">
           <el-col :span="8">
-            <HealthCard></HealthCard>
+            <HealthCard image="1"></HealthCard>
           </el-col>
           <el-col :span="8">
-            <HealthCard></HealthCard>
+            <HealthCard image="2"></HealthCard>
           </el-col>
           <el-col :span="8">
-            <HealthCard></HealthCard>
+            <HealthCard image="3"></HealthCard>
           </el-col>
         </el-row>
         <el-row style="margin-top: 20px;" :gutter="20">
           <el-col :span="8">
-            <HealthCard></HealthCard>
+            <HealthCard image="1"></HealthCard>
           </el-col>
           <el-col :span="8">
-            <HealthCard></HealthCard>
+            <HealthCard image="2"></HealthCard>
           </el-col>
           <el-col :span="8">
-            <HealthCard></HealthCard>
+            <HealthCard image="3"></HealthCard>
           </el-col>
         </el-row>
       </div>
@@ -49,24 +49,24 @@
         </div>
         <el-row style="margin-top: 20px;" :gutter="20">
           <el-col :span="8">
-            <HealthCard color="#DBB17E"></HealthCard>
+            <HealthCard image="1" color="#DBB17E"></HealthCard>
           </el-col>
           <el-col :span="8">
-            <HealthCard color="#DBB17E"></HealthCard>
+            <HealthCard image="2" color="#DBB17E"></HealthCard>
           </el-col>
           <el-col :span="8">
-            <HealthCard color="#DBB17E"></HealthCard>
+            <HealthCard image="3" color="#DBB17E"></HealthCard>
           </el-col>
         </el-row>
         <el-row style="margin-top: 20px;" :gutter="20">
           <el-col :span="8">
-            <HealthCard color="#DBB17E"></HealthCard>
+            <HealthCard image="1" color="#DBB17E"></HealthCard>
           </el-col>
           <el-col :span="8">
-            <HealthCard color="#DBB17E"></HealthCard>
+            <HealthCard image="2" color="#DBB17E"></HealthCard>
           </el-col>
           <el-col :span="8">
-            <HealthCard color="#DBB17E"></HealthCard>
+            <HealthCard image="3" color="#DBB17E"></HealthCard>
           </el-col>
         </el-row>
       </div>
@@ -82,30 +82,30 @@
         </div>
         <el-row style="margin-top: 20px;" :gutter="20">
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="1"></ApparatusCard>
           </el-col>
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="2"></ApparatusCard>
           </el-col>
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="3"></ApparatusCard>
           </el-col>
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="4"></ApparatusCard>
           </el-col>
         </el-row>
         <el-row style="margin-top: 20px;" :gutter="20">
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="1"></ApparatusCard>
           </el-col>
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="2"></ApparatusCard>
           </el-col>
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="3"></ApparatusCard>
           </el-col>
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="4"></ApparatusCard>
           </el-col>
         </el-row>
 
@@ -122,16 +122,16 @@
         </div>
         <el-row style="margin-top: 20px;" :gutter="20">
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="2"></ApparatusCard>
           </el-col>
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="3"></ApparatusCard>
           </el-col>
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="4"></ApparatusCard>
           </el-col>
           <el-col :span="6">
-            <ApparatusCard></ApparatusCard>
+            <ApparatusCard type="1"></ApparatusCard>
           </el-col>
         </el-row>
       </div>
