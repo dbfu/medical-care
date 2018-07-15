@@ -101,6 +101,8 @@ export default {
     getCitys() {
       this.$axios.get("api/socialInsurancePolicy/allcitys").then(res => {
         this.citys = res.data;
+        this.citys.unshift({id:null, "name": "全部",
+        "level": 0,"parentId":null,})
       });
     },
     getAllMedicine(params) {

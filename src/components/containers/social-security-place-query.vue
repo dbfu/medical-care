@@ -91,6 +91,7 @@ export default {
       selectArea:'',
       type:'',
       page:0,
+      flag:null,
       totalElements:null,
       newHotDrugs:'',
       initParams : {
@@ -110,6 +111,8 @@ export default {
           this.$axios.get(`api/socialInsuranceAgency/getAddress/${params.parentId}`).then(res => {
             if(params.parentId==0){
                this.citys = res.data;
+               this.citys.unshift({id:null, "name": "全部",
+        "level": 0,"parentId":null,})
             }else{
               this.areas = res.data;
             }
@@ -125,11 +128,35 @@ export default {
             })
         },
         chanegCity(v){
+          console.log(v)
           this.selectArea='';
-          this.getCitys({parentId:v})
+          this.type = '';
+          this.flag = v;
+          this.areas = [];
+          if(v){
+            this.types = [{
+              id:0,
+              name:'医院'
+            },{
+              id:1,
+              name:'药房'
+            }]
+            this.getCitys({parentId:v})
+          }
+          else{
+            this.types = [];
+          }
+          
         },
         onSubmit(){
           let initParams = this.initParams;
+          if(!this.flag){
+             initParams.page=0;
+             initParams.addressId=null;
+             initParams.type=null;
+             this.getAllList();
+            return false;
+          }
           initParams.page=this.page;
           initParams.addressId=this.selectArea;
           initParams.type=this.type;
@@ -143,15 +170,6 @@ export default {
           initParams.type=this.type || null;
           this.getAllList();
       },
-      // getHotDrug(){
-      //     const medicines = this.infos.medicines;
-      //     let hotDrugs = [];
-      //     medicines.map(item=>{
-      //       hotDrugs.push(item.medicineName.genericName);
-      //     })
-      //     this.newHotDrugs = hotDrugs.join('|');
-      //     this.newHotDrugs = this.newHotDrugs.subString(0,newHotDrugs.Length-1);
-      // }
   },
 
 };
