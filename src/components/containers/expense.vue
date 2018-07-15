@@ -127,7 +127,7 @@ export default {
       })
     },
     getAllMedicine(params){
-      this.$axios.get(`/api/medicine/getAll/${params.page}`).then(res => {
+      this.$axios.get(`/api/medicine/getReimburseMedicine`,{params}).then(res => {
        this.medicines = res.data.content;
        this.totalElements = res.data.totalElements;
       })
@@ -141,6 +141,7 @@ export default {
     },
     onSubmit(){ 
       console.log(this.page)
+      this.page = 0;
         this.$axios.get(`/api/medicine/getReimburseMedicine`,{
           params:{
             cityId:this.value2,
