@@ -88,8 +88,9 @@
       </div>
       <div class="symptom_r fl">
         <p class="clearfix">
-           <span class="active">胸部不适</span><span>呼吸困难</span><span>咳嗽</span><span>胸痛</span>
-           <span>四肢无力</span><span class="more fr">更多 <i class="el-icon-arrow-down"></i></span>
+          <span  v-for="item in indications">{{item.indicationName}}</span>
+          <!--  <span class="active">胸部不适</span><span>呼吸困难</span><span>咳嗽</span><span>胸痛</span>
+           <span>四肢无力</span><span class="more fr">更多 <i class="el-icon-arrow-down"></i></span> -->
         </p>
         <p>
           <span class="active">无</span><span>失眠</span><span>咳嗽</span>
@@ -164,8 +165,19 @@ export default {
   },
   data() {
     return {
-    
+      indications:[],
     };
+  },
+  methods:{
+    getAllIndication(){
+      const page = 0;
+      this.$axios.get(`/apiindication/getAll/${page}`).then(res => {
+            this.indications = res.data.content;
+      })
+    }
+  },
+  mounted(){
+    this.getAllIndication();
   }
 };
 </script>

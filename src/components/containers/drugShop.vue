@@ -56,11 +56,10 @@
         <div slot="content">
           <div class="drug-list">
             <el-row :gutter="20">
-              <el-col :span="6" v-for="item in hotFlag">
-                <div>
-                  <DrugCard :drugInfo='item'></DrugCard>
+              <el-col :span="6" v-for="item in hotFlag" >
+                <div style="margin-bottom:20px">
+                  <DrugCard  :drugInfo='item'></DrugCard>
                 </div>
-
               </el-col>
             </el-row>
             <div class="pagination fr" style="margin:calc(30/1080*100vh) 0">
