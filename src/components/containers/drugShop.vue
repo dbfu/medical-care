@@ -75,7 +75,7 @@
 </template>
 <script>
 import Header1 from "../common/header1";
-import Card from "../common/card";
+import Card from "../common/card.1";
 import Search from "../common/search";
 import Footer from "../common//footer";
 import DrugCard from "../common/drug-card";
@@ -237,9 +237,6 @@ export default {
   font-size: calc(16 / 1920 * 100vw);
   color: #fff;
   cursor: pointer;
-}
-.contanier[data-v-39d49e21] {
-  padding: 0 !important;
 }
 </style>
 
